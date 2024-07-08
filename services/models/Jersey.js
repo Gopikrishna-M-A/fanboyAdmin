@@ -5,7 +5,7 @@ const JerseySchema = new mongoose.Schema({
   description: { type: String, required: true },
   category: { type: String, required: true, enum: ['international', 'club'] },
   team: { type: mongoose.Schema.Types.ObjectId, ref: 'Team', required: true },
-  variant: { type: String, required: true, enum: ['firstCopy', 'master', 'player'] },
+  variant: { type: String, required: true, enum: ['firstcopy', 'master', 'player'] },
   costPrice: { type: Number, min: 0 },
   price: { type: Number, required: true, min: 0 },
   mrp: { type: Number, required: true, min: 0 },

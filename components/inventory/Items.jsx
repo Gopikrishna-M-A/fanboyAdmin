@@ -141,7 +141,7 @@ export default function DataTableDemo() {
 
 
   useEffect(() => {
-    axios.get(`${baseURL}/api/jerseys`).then((res) => {
+    axios.get(`/api/jerseys`).then((res) => {
       setData(res.data)
     })
 
@@ -472,7 +472,7 @@ export default function DataTableDemo() {
                             <SelectValue />
                           </SelectTrigger>
                           <SelectContent>
-                            <SelectItem value='firstCopy'>firstCopy</SelectItem>
+                            <SelectItem value='firstcopy'>firstcopy</SelectItem>
                             <SelectItem value='master'>master</SelectItem>
                             <SelectItem value='player'>player</SelectItem>
                           </SelectContent>
