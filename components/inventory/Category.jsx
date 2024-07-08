@@ -123,7 +123,7 @@ export default function DataTableDemo() {
         )
       },
       cell: ({ row }) => (
-        <div className='lowercase'>{row.getValue("name")}</div>
+        <div className=''>{row.getValue("name")}</div>
       ),
     },
     {
