@@ -16,7 +16,6 @@ import axios from "axios"
 import { generatePerformanceReport } from "../components/dashboard/report"
 import { boolean } from "zod"
 import Image from "next/image"
-const baseURL = process.env.NEXT_PUBLIC_BASE_URL
 
 export default function DashboardPage() {
   const [orders, setOrders] = useState([])

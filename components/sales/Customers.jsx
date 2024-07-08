@@ -82,7 +82,6 @@ export default function DataTableDemo() {
   const [columnVisibility, setColumnVisibility] = useState({});
   const [rowSelection, setRowSelection] = useState({});
 
-  const baseURL = process.env.NEXT_PUBLIC_BASE_URL;
 
   useEffect(() => {
     axios.get(`/api/users`).then((res) => {
@@ -211,46 +210,46 @@ export default function DataTableDemo() {
     },
   });
 
-  const deleteProduct = async () => {
-    try {
-      const selectedRows = table.getFilteredSelectedRowModel().rows;
-      const selectedIds = selectedRows.map((row) => row.original._id);
-      const selectedIndexs = selectedRows.map((row) => row.index);
+  // const deleteProduct = async () => {
+  //   try {
+  //     const selectedRows = table.getFilteredSelectedRowModel().rows;
+  //     const selectedIds = selectedRows.map((row) => row.original._id);
+  //     const selectedIndexs = selectedRows.map((row) => row.index);
 
-      await Promise.all(
-        selectedIds.map(async (id) => {
-          await axios.delete(`${baseURL}/api/products/${id}`);
-        })
-      );
+  //     await Promise.all(
+  //       selectedIds.map(async (id) => {
+  //         await axios.delete(`${baseURL}/api/products/${id}`);
+  //       })
+  //     );
 
-      setData(data.filter((product) => !selectedIds.includes(product._id)));
+  //     setData(data.filter((product) => !selectedIds.includes(product._id)));
 
-      setRowSelection({});
-    } catch (error) {
-      console.error("Error deleting categories:", error);
-    }
-  };
+  //     setRowSelection({});
+  //   } catch (error) {
+  //     console.error("Error deleting categories:", error);
+  //   }
+  // };
 
-  const addNewItem = () => {
-    const requestBody = {
-      name: prodName,
-      description: prodDesc,
-      price: prodPrice,
-      category: prodCat,
-      attributes: prodAttr,
-      images: ["product.jpg", "product.jpg", "product.jpg", "product.jpg"],
-    };
+  // const addNewItem = () => {
+  //   const requestBody = {
+  //     name: prodName,
+  //     description: prodDesc,
+  //     price: prodPrice,
+  //     category: prodCat,
+  //     attributes: prodAttr,
+  //     images: ["product.jpg", "product.jpg", "product.jpg", "product.jpg"],
+  //   };
 
-    axios
-      .post(`${baseURL}/api/products`, requestBody)
-      .then((res) => {
-        console.log(res.data);
-        setData([...data, res.data]);
-      })
-      .catch((error) => {
-        console.error("Error adding product:", error);
-      });
-  };
+  //   axios
+  //     .post(`${baseURL}/api/products`, requestBody)
+  //     .then((res) => {
+  //       console.log(res.data);
+  //       setData([...data, res.data]);
+  //     })
+  //     .catch((error) => {
+  //       console.error("Error adding product:", error);
+  //     });
+  // };
 
   return (
     <Card className="col-span-7">

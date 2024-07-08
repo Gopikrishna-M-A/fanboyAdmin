@@ -104,7 +104,6 @@ export default function DataTableDemo() {
 
   const [reorderPoint, setReorderPoint] = useState("")
 
-  const baseURL = process.env.NEXT_PUBLIC_BASE_URL
   const [previewOpen, setPreviewOpen] = useState(false)
   const [previewImage, setPreviewImage] = useState("")
   const [previewTitle, setPreviewTitle] = useState("")

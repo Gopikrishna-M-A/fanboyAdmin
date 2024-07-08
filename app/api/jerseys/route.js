@@ -5,6 +5,7 @@ import {
   getJerseyById,
   createJersey,
   deleteJersey,
+  updateJersey
 } from "@/services/jerseyService" // Importing jersey functions
 // import { authOptions } from "../auth/[...nextauth]/options"
 

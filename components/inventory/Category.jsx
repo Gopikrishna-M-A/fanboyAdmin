@@ -61,7 +61,7 @@ import {
 } from "../ui/table"
 import Link from "next/link"
 import axios from "axios"
-import { PlusOutlined, UploadOutlined } from "@ant-design/icons"
+import { UploadOutlined } from "@ant-design/icons"
 import Image from "next/image"
 
 export default function DataTableDemo() {
@@ -70,34 +70,13 @@ export default function DataTableDemo() {
   const [columnFilters, setColumnFilters] = useState([])
   const [columnVisibility, setColumnVisibility] = useState({})
   const [rowSelection, setRowSelection] = useState({})
-  const baseURL = process.env.NEXT_PUBLIC_BASE_URL
-  const [fileList, setFileList] = useState([])
-  const [catName, setCatName] = useState("")
-  const [catDesc, setCatDesc] = useState("")
-  const [catParent, setCatParent] = useState("")
 
-  const [attributes, setAttributes] = useState([])
-  const [attribute, setAttribute] = useState("")
-  const [parentAttributes, setParentAttributes] = useState([])
+  const [catName, setCatName] = useState("")
+  const [fileList, setFileList] = useState([])
+
 
   const handleChange = ({ fileList: newFileList }) => setFileList(newFileList)
 
-  const uploadButton = (
-    <button
-      style={{
-        border: 0,
-        background: "none",
-      }}
-      type='button'>
-      <PlusOutlined />
-      <div
-        style={{
-          marginTop: 8,
-        }}>
-        Upload
-      </div>
-    </button>
-  )
 
   useEffect(() => {
     axios.get(`/api/teams`).then((res) => {
@@ -256,25 +235,6 @@ export default function DataTableDemo() {
       });
   }
 
-  useEffect(() => {
-    setParentAttributes([])
-    if (catParent) {
-      let catInfo = data.find((cat) => cat._id === catParent)
-      setParentAttributes([...catInfo.attributeKeys])
-      while (catInfo?.parentCategory?._id) {
-        let parentCat = data.find(
-          (cat) => cat._id === catInfo.parentCategory._id
-        )
-        if (parentCat.attributeKeys.length > 0) {
-          setParentAttributes((prevAttributes) => [
-            ...prevAttributes,
-            ...parentCat.attributeKeys,
-          ])
-        }
-        catInfo = parentCat
-      }
-    }
-  }, [catParent])
 
   return (
     <Card className='col-span-7'>
@@ -306,39 +266,7 @@ export default function DataTableDemo() {
                           onChange={handleChange}>
                     <Button className='flex gap-2' variant='outline'> <UploadOutlined />Click to Upload</Button>
                   </Upload>
-
-                  <div className='flex flex-wrap gap-2'>
-                    {parentAttributes.map((attribute, index) => (
-                      <div
-                        key={index}
-                        className='bg-black rounded px-3 py-1 text-white uppercase text-sm'>
-                        {attribute}
-                      </div>
-                    ))}
-
-                    {attributes.map((attribute, index) => (
-                      <TooltipProvider>
-                        <Tooltip>
-                          <TooltipTrigger asChild>
-                            <div
-                              onClick={() => {
-                                setAttributes((prevAttributes) => {
-                                  const newAttributes = [...prevAttributes]
-                                  newAttributes.splice(index, 1)
-                                  return newAttributes
-                                })
-                              }}
-                              className='bg-gray-200 rounded px-3 py-1 text-muted-foreground uppercase text-sm cursor-pointer hover:bg-gray-300 transition'>
-                              {attribute}
-                            </div>
-                          </TooltipTrigger>
-                          <TooltipContent>
-                            <p>Click to remove</p>
-                          </TooltipContent>
-                        </Tooltip>
-                      </TooltipProvider>
-                    ))}
-                  </div>
+                  
                 </div>
               </div>
               <DialogFooter className='sm:justify-start'>

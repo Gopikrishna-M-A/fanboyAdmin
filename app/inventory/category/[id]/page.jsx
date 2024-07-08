@@ -3,7 +3,6 @@ import { Button } from "../../../../components/ui/button";
 import {
   Card,
   CardContent,
-  CardDescription,
   CardHeader,
   CardTitle,
 } from "../../../../components/ui/card";
@@ -11,68 +10,52 @@ import { Input } from "../../../../components/ui/input";
 import {
   Tabs,
   TabsContent,
-  TabsList,
-  TabsTrigger,
+
 } from "../../../../components/ui/tabs";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "../../../../components/ui/select"
-import { CalendarDateRangePicker } from "../../../../components/dashboard/date-range-picker";
-import { Overview } from "../../../../components/dashboard/overview";
-import ProductsList from "../../../../components/inventory/Items";
+import { Upload } from "antd"
 import { useEffect, useState } from "react";
 import axios from "axios";
 import Link from "next/link";
-import { set } from "date-fns";
-import { LogIn } from "lucide-react";
+import { Label } from "@/components/ui/label";
+import { UploadOutlined } from "@ant-design/icons"
 
-
-const baseURL = process.env.NEXT_PUBLIC_BASE_URL;
 
 const page = ({ params }) => {
   const [name, setName] = useState("");
-  const [description, setDescription] = useState("");
-  const [parentCategory, setParentCategory] = useState("");
-  const [categories, setCategories] = useState([]);
-  const [categoryAttributes, setCategoryAttributes] = useState([]);
-  const [category, setCategory] = useState({});
+  const [fileList, setFileList] = useState([])
+
+
+  const handleChange = ({ fileList: newFileList }) => setFileList(newFileList)
+
 
   useEffect(() => {
-    axios.get(`${baseURL}/api/categories`).then((res) => {
-      setCategories(res.data)
-    });
-
-    axios.get(`${baseURL}/api/categories/${params.id}`).then((res) => {
-          setCategory(res.data);
+    axios.get(`/api/teams?id=${params.id}`).then((res) => {
+          setName(res.data.name);
     })
-
   }, []);
 
 
 
 
-  const onSubmit = () => {
+  const onSubmit = async () => {
+    const formData = new FormData()
+    fileList.map((file) => {
+      formData.append("file", file.originFileObj)
+    })
+    const res = await axios.post("/api/aws", formData, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    })
     const data ={
       name,
-      description,
-      parentCategory,
-      attributeKeys: categoryAttributes,
+      logo:res.data[0]
     }
-    axios.patch(`${baseURL}/api/categories/${category._id}`, data)
+    console.log("data",data);
+    axios.put(`/api/teams?id=${params.id}`, data).then((res) => {
+      console.log("updated")
+    })
   }
-
-  useEffect(() => {
-    setName(category.name);
-    setDescription(category.description);
-    setParentCategory(category.parentCategory);
-    setCategoryAttributes(category.attributeKeys);
-  }, [category]);
-
-
 
 
 
@@ -82,97 +65,38 @@ const page = ({ params }) => {
         <h2 className="text-3xl font-bold tracking-tight">
           <Link href="/inventory">Inventory</Link>
         </h2>
-        {/* <div className="flex items-center space-x-2">
-        <CalendarDateRangePicker />
-        <Button>Download</Button>
-      </div> */}
+
       </div>
       <Tabs defaultValue="items" className="space-y-4">
         <div className="flex justify-between">
-          {/* <TabsList>
-        <TabsTrigger value="items">items</TabsTrigger>
-        <TabsTrigger value="item-groups">item groups</TabsTrigger>
-        <TabsTrigger value="Composite-items">Composite items</TabsTrigger>
-        <TabsTrigger value="Adjustments"> Adjustments</TabsTrigger>
-      </TabsList> */}
         </div>
         <TabsContent value="items" className="space-y-4">
           <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-7">
             <Card className="col-span-7">
                   <CardHeader>
                     <CardTitle className="flex justify-between">
-                      Edit Category
+                      Edit Team
                       <Button onClick={onSubmit}> Save Item</Button>
                     </CardTitle>
                   </CardHeader>
                   <CardContent>
 
 
-                    <div className="flex gap-2 text-md -mt-4 items-center">
-                      <div className="text-md text-foreground font-bold w-24">
-                        Title
-                      </div>
-                      <Input
-                        className="text-md text-muted-foreground "
-                        value={name}
-                        onChange={(e) => setName(e.target.value)}
-                      />
-                    </div>
-                    <div className="flex gap-2 text-md my-2 items-center">
-                      <div className="text-md text-foreground font-bold w-24">
-                        Description
-                      </div>
-                      <Input
-                        className="text-md text-muted-foreground "
-                        value={description}
-                        onChange={(e) => setDescription(e.target.value)}
-                      />
-                    </div>
-                    
+                  <div className='grid flex-1 gap-2'>
+                  <Input
+                    onChange={(e) => setName(e.target.value)}
+                    placeholder='Team name'
+                  />
 
-                    <div className="flex gap-2 text-md my-2 items-center">
-                      <div className="text-md text-foreground font-bold w-24">
-                        Parent Category
-                      </div>
-                       <Select 
-                       value={parentCategory}
-                       onValueChange={(e)=>{
-                        setParentCategory(e)
-                        }}>
-                        <SelectTrigger >
-                          <SelectValue 
-                          placeholder="Item Category"/>
-                        </SelectTrigger>
-                        <SelectContent >
-                          {categories.map((cat,index) => (
-                            <SelectItem key={index} value={cat._id}>{cat.name}</SelectItem>
-                          ))}
-                        </SelectContent>
-                      </Select>
-                    </div>
-                   
+                  <Label>Add Logo</Label>
 
-                    <div className="flex gap-2 text-md flex-col">
-                      <div className="text-md text-foreground font-bold w-24">
-                        Attributes
-                      </div>
-          
-                      {categoryAttributes?.map((attribute,index) => (
-                        <div key={index} className="flex gap-2 items-center">
-                          <Input
-                            className="text-md text-muted-foreground "
-                            value={attribute}
-                            onChange={(e) =>
-                              setCategoryAttributes((prevProdAttr) =>{
-                                const updatedArray = [...prevProdAttr]
-                                updatedArray[index] = e.target.value
-                                return updatedArray
-                              })
-                            }
-                          />
-                        </div>
-                      ))}
-                    </div>
+                  <Upload 
+                          fileList={fileList}
+                          onChange={handleChange}>
+                    <Button className='flex gap-2' variant='outline'> <UploadOutlined />Click to Upload</Button>
+                  </Upload>
+                  
+                </div>
                 
                   </CardContent>
             </Card>

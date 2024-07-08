@@ -60,7 +60,6 @@ function convertDateFormat2(inputDate) {
   return formattedDate;
 }
 
-const baseURL = process.env.NEXT_PUBLIC_BASE_URL;
 
 function formatDate(inputDateTime) {
   const dateTimeObject = parseISO(inputDateTime);

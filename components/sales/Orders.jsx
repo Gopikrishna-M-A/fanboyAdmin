@@ -95,7 +95,6 @@ export default function DataTableDemo() {
   const [columnVisibility, setColumnVisibility] = useState({});
   const [rowSelection, setRowSelection] = useState({});
   const [date, setDate] = useState(null);
-  const baseURL = process.env.NEXT_PUBLIC_BASE_URL;
 
   useEffect(() => {
     axios.get(`/api/orders`).then((res) => {

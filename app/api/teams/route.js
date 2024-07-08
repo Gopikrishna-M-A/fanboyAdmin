@@ -1,6 +1,6 @@
 // import { getServerSession } from "next-auth"
 import { NextResponse } from "next/server"
-import { getAllTeams, getTeamById, createTeam, deleteTeam } from "@/services/teamService" // Importing team functions
+import { getAllTeams, getTeamById, createTeam, deleteTeam, updateTeam } from "@/services/teamService" // Importing team functions
 // import { authOptions } from "../auth/[...nextauth]/options"
 
 export async function GET(request) {
@@ -81,4 +81,25 @@ export async function DELETE(request) {
             { status: 500 }
         )
     }
+}
+
+
+export async function PUT(request) {
+  const data = await request.json()
+  const { searchParams } = new URL(request.url)
+  const id = searchParams.get("id")
+
+  try {
+    const team = await updateTeam(id, data)
+    if (!team) {
+      return NextResponse.json({ error: "team not found" }, { status: 404 })
+    }
+    return NextResponse.json( team )
+  } catch (error) {
+    console.error("Failed to update team:", error)
+    return NextResponse.json(
+      { error: "Failed to update team" },
+      { status: 500 }
+    )
+  }
 }
