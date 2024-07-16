@@ -511,11 +511,11 @@ export default function DashboardPage() {
                       <div className='text-sm text-muted-foreground '>
                         MRP :{" "}
                         <span className='text-black font-bold'>
-                          {formattedPrice(product.MRP)}
+                          {formattedPrice(product.price)}
                         </span>{" "}
                       </div>
                       <div className='text-sm text-muted-foreground '>
-                        QTY : {product.stockQuantity} remaining
+                        QTY : {product.stock} remaining
                       </div>
                     </div>
                   </div>

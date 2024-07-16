@@ -1,18 +1,16 @@
 import mongoose from 'mongoose'
-import User from './User';
-import Jersey from './Jersey';
 
 const orderSchema = new mongoose.Schema({
   customer: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: User,
+    ref: "User",
     required: true,
   },
   jerseys: [
     {
       jersey: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: Jersey,
+        ref: "Jersey",
         required: true,
       },
       quantity: {
@@ -93,7 +91,21 @@ const orderSchema = new mongoose.Schema({
     type:String,
     enum:["Delivery","Pickup"],
     default:"Delivery"
+  },
+  subTotal: {
+    type: Number,
+    required: true,
+  },
+  discountAmount: {
+    type: Number,
+    default: 0,
+  },
+  coupon:{
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "Coupon",
   }
+
+
 });
 
 

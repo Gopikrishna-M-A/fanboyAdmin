@@ -7,6 +7,7 @@ import {
 import { CalendarDateRangePicker } from "../../components/dashboard/date-range-picker"
 import Customers from "../../components/sales/Customers"
 import Orders from "../../components/sales/Orders"
+import Coupons from "../../components/sales/Coupons" 
 
 
 
@@ -20,7 +21,8 @@ export default function Page() {
       <Tabs defaultValue="Customers" className="space-y-4">
         <TabsList>
           <TabsTrigger value="Customers">Customers</TabsTrigger>
-          <TabsTrigger value="orders" >orders</TabsTrigger>
+          <TabsTrigger value="orders" >Orders</TabsTrigger>
+          <TabsTrigger value="coupons" >Coupons</TabsTrigger>
 
         </TabsList>
         <TabsContent value="Customers" className="space-y-4">
@@ -32,6 +34,12 @@ export default function Page() {
         <TabsContent value="orders" className="space-y-4">
           <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-7">
             <Orders />
+          </div>
+        </TabsContent>
+
+        <TabsContent value="coupons" className="space-y-4">
+          <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-7">
+            <Coupons />
           </div>
         </TabsContent>
 
