@@ -5,6 +5,8 @@ import { Search } from "../components/dashboard/search"
 import { UserNav } from "../components/dashboard/user-nav"
 import { ModeToggle } from "../components/mode-toggle";
 import TeamSwitcher from "../components/dashboard/team-switcher"
+import { Button } from "./ui/button"
+import { signOut } from "next-auth/react"
 
 
 const Layout = ({ children }) => {
@@ -19,6 +21,7 @@ const Layout = ({ children }) => {
               {/* <Search /> */}
               {/* <UserNav /> */}
               <ModeToggle />
+              <Button onClick={signOut}>Sign out</Button>
             </div>
           </div>
         </div>
