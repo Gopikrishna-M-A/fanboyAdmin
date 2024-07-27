@@ -25,7 +25,7 @@ export function RecentSales({ recentSales }) {
             <p className="text-sm font-medium leading-none">{sale.customer?.name}</p>
             <p className="text-sm text-muted-foreground">{sale.customer?.email}</p>
           </div>
-          <div className="ml-auto font-medium">+ {formattedPrice(sale.total.toFixed(2))}</div>
+          <div className="ml-auto font-medium">+ {formattedPrice(sale?.total?.toFixed(2))}</div>
         </div>
       ))}
     </div>
@@ -33,5 +33,5 @@ export function RecentSales({ recentSales }) {
 }
 
 function getInitials(name) {
-  return name?.split(' ').map(word => word.charAt(0)).join('');
+  return name?.split(' ').map(word => word?.charAt(0))?.join('');
 }

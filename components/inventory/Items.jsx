@@ -1,5 +1,4 @@
 "use client"
-
 import React, { useEffect, useState } from "react"
 import {
   CaretSortIcon,
@@ -45,7 +44,17 @@ import {
 
 import { Checkbox } from "../ui/checkbox"
 import { Label } from "../ui/label"
-
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog"
 import { Button } from "../ui/button"
 import {
   DropdownMenu,
@@ -71,6 +80,8 @@ import { set } from "date-fns"
 import ProductCard from "./ProductCard"
 import { PlusOutlined } from "@ant-design/icons"
 import { Modal, Upload } from "antd"
+import { useToast } from "@/components/ui/use-toast"
+
 
 const getBase64 = (file) =>
   new Promise((resolve, reject) => {
@@ -81,6 +92,7 @@ const getBase64 = (file) =>
   })
 
 export default function DataTableDemo() {
+  const { toast } = useToast()
   const [data, setData] = useState([])
   const [sorting, setSorting] = useState([])
   const [columnFilters, setColumnFilters] = useState([])
@@ -310,7 +322,12 @@ export default function DataTableDemo() {
 
       await Promise.all(
         selectedIds.map(async (id) => {
-          await axios.delete(`/api/jerseys?id=${id}`)
+          await axios.delete(`/api/jerseys?id=${id}`).then((res)=>{
+            toast({
+              title: `${res.data.name} DELETED`,
+            })
+          })
+
         })
       )
 
@@ -346,7 +363,6 @@ export default function DataTableDemo() {
       description: description,
       reorderPoint: reorderPoint,
     }
-    console.log("requestBody", requestBody)
     axios
       .post(`/api/jerseys`, requestBody)
       .then((res) => {
@@ -355,9 +371,16 @@ export default function DataTableDemo() {
         setSellingPrice("")
         setCostPrice("")
         setMRP("")
+        setFileList([])
+        toast({
+          title: `Jersey created successfully`,
+        })
       })
       .catch((error) => {
-        console.error("Error adding product:", error)
+        setFileList([])
+        toast({
+          title: `Error adding jersey`,
+        })
       })
   }
 
@@ -613,12 +636,29 @@ export default function DataTableDemo() {
               className='max-w-sm'
             />
             <div className='flex gap-2'>
-              <Button
-                onClick={deleteProduct}
-                disabled={!Object.keys(rowSelection).length}
-                variant='destructive'>
-                Delete
-              </Button>
+              <AlertDialog>
+      <AlertDialogTrigger asChild>
+        <Button variant="destructive" disabled={!Object.keys(rowSelection).length}>
+          Delete
+        </Button>
+      </AlertDialogTrigger>
+      <AlertDialogContent>
+        <AlertDialogHeader>
+          <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
+          <AlertDialogDescription>
+            This action cannot be undone. This will permanently delete the
+            selected jersey(s) from our servers.
+          </AlertDialogDescription>
+        </AlertDialogHeader>
+        <AlertDialogFooter>
+          <AlertDialogCancel onClick={()=>setRowSelection({})}>Cancel</AlertDialogCancel>
+          <AlertDialogAction  onClick={deleteProduct}>
+            Yes, delete jersey(s)
+          </AlertDialogAction>
+        </AlertDialogFooter>
+      </AlertDialogContent>
+    </AlertDialog>
+
 
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>

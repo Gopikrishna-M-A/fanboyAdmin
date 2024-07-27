@@ -104,11 +104,11 @@ export default function TeamSwitcher( className ) {
             <CommandList>
               {/* <CommandInput placeholder="Search team..." /> */}
               <CommandEmpty>No team found.</CommandEmpty>
-              {groups.map((group,index) => (
-                <CommandGroup key={index} heading={group.label}>
-                  {group.teams.map((team) => (
+              {groups?.map((group,index) => (
+                <CommandGroup key={index} heading={group?.label}>
+                  {group?.teams.map((team) => (
                     <CommandItem
-                      key={team.value}
+                      key={team?.value}
                       onSelect={() => {
                         setSelectedTeam(team)
                         setOpen(false)
@@ -116,11 +116,11 @@ export default function TeamSwitcher( className ) {
                       className="text-sm"
                     >
                       
-                      {team.label}
+                      {team?.label}
                       <CheckIcon
                         className={cn(
                           "ml-auto h-4 w-4",
-                          selectedTeam.value === team.value
+                          selectedTeam?.value === team?.value
                             ? "opacity-100"
                             : "opacity-0"
                         )}

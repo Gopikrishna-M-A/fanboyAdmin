@@ -18,11 +18,14 @@ import axios from "axios";
 import Link from "next/link";
 import { Label } from "@/components/ui/label";
 import { UploadOutlined } from "@ant-design/icons"
-
+import { useRouter } from "next/navigation";
+import { useToast } from "@/components/ui/use-toast"
 
 const page = ({ params }) => {
+  const { toast } = useToast()
   const [name, setName] = useState("");
   const [fileList, setFileList] = useState([])
+  const router  = useRouter()
 
 
   const handleChange = ({ fileList: newFileList }) => setFileList(newFileList)
@@ -30,7 +33,7 @@ const page = ({ params }) => {
 
   useEffect(() => {
     axios.get(`/api/teams?id=${params.id}`).then((res) => {
-          setName(res.data.name);
+          setName(res.data.team.name);
     })
   }, []);
 
@@ -53,7 +56,10 @@ const page = ({ params }) => {
     }
     console.log("data",data);
     axios.put(`/api/teams?id=${params.id}`, data).then((res) => {
-      console.log("updated")
+      toast({
+        title: `${res.data.name} UPDATED`,
+      })
+      router.push('/inventory')
     })
   }
 
@@ -84,6 +90,7 @@ const page = ({ params }) => {
 
                   <div className='grid flex-1 gap-2'>
                   <Input
+                    value={name}
                     onChange={(e) => setName(e.target.value)}
                     placeholder='Team name'
                   />

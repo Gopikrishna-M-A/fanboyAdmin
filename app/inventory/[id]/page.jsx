@@ -23,14 +23,17 @@ import Link from "next/link"
 import { Checkbox } from "../../../components/ui/checkbox"
 import { Label } from "../../../components/ui/label"
 import { Textarea } from "../../../components/ui/textarea"
+import { useRouter } from "next/navigation"
+import { useToast } from "@/components/ui/use-toast"
 
 const page = ({ params }) => {
+  const { toast } = useToast()
   const [prodName, setProdName] = useState("")
   const [prodCat, setProdCat] = useState("")
   const [selectedTeam,setSelectedTeam] = useState('')
   const [stock, setStock] = useState('')
   const [variant, setVariant] = useState('')
-
+  const router = useRouter()
   const [sellingPrice, setSellingPrice] = useState("")
   const [costPrice, setCostPrice] = useState("")
   const [MRP, setMRP] = useState("")
@@ -79,7 +82,10 @@ const page = ({ params }) => {
     axios
       .put(`/api/jerseys?id=${params.id}`, filteredData )
       .then((res) => {
-        console.log("updated")
+        toast({
+          title: `${res.data.name} UPDATED`,
+        })
+        router.push('/inventory')
       })
   }
 

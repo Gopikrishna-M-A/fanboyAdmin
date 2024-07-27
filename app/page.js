@@ -38,34 +38,53 @@ export default function DashboardPage() {
 
   const [reportDate, setReportDate] = useState()
 
-  const fetchOrders = () => {
-    axios.get(`/api/orders`).then((res) => {
-      setOrders(res.data)
-      setOrdersCopy(res.data)
-      calculateTotalRevenue(res.data)
-      calculateTotalSales(res.data)
-      getLatestOrders(res.data)
-      calculateDistinctCustomers(res.data)
-      calculateDailyRevenue(res.data)
-      generateMonthlyRevenueData(res.data)
-    })
+  const fetchOrders = async () => {
+    try {
+      const res = await axios.get(`/api/orders`)
+      const data = res.data
+
+      setOrders(data)
+      setOrdersCopy(data)
+      calculateTotalRevenue(data)
+      calculateTotalSales(data)
+      getLatestOrders(data)
+      calculateDistinctCustomers(data)
+      calculateDailyRevenue(data)
+      generateMonthlyRevenueData(data)
+    } catch (error) {
+      console.error("Error fetching orders:", error)
+    }
   }
 
-  const fetchProducts = () => {
-    axios.get(`/api/jerseys`).then((res) => {
-      setProducts(res.data)
-      const filteredProducts = res.data.filter(
+  const fetchProducts = async () => {
+    try {
+      const res = await axios.get(`/api/jerseys`)
+      const data = res.data
+
+      setProducts(data)
+
+      const filteredProducts = data.filter(
         (product) => product.stock < product.reorderPoint
       )
+
       setProductsToReorder(filteredProducts)
       console.log("ProductsToReorder", filteredProducts)
-    })
+    } catch (error) {
+      console.error("Error fetching products:", error)
+    }
   }
 
   useEffect(() => {
-    fetchOrders()
-    fetchProducts()
-  }, [])
+    const fetchData = async () => {
+      try {
+        await Promise.all([fetchOrders(), fetchProducts()]);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    };
+  
+    fetchData();
+  }, [fetchOrders, fetchProducts]);
 
   useEffect(() => {
     const dateObject = new Date(reportDate)
