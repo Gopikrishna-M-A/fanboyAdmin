@@ -10,6 +10,7 @@ export async function getJerseys(limit = 10, page = 1) {
       path: "team",
       model: Team,
     })
+    .sort({ name: 1 })
     .lean()
   return JSON.parse(JSON.stringify(jerseys))
 }

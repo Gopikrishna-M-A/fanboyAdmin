@@ -81,6 +81,7 @@ import ProductCard from "./ProductCard"
 import { PlusOutlined } from "@ant-design/icons"
 import { Modal, Upload } from "antd"
 import { useToast } from "@/components/ui/use-toast"
+import { useRouter } from "next/navigation"
 
 
 const getBase64 = (file) =>
@@ -92,6 +93,7 @@ const getBase64 = (file) =>
   })
 
 export default function DataTableDemo() {
+  const router = useRouter()
   const { toast } = useToast()
   const [data, setData] = useState([])
   const [sorting, setSorting] = useState([])
@@ -370,18 +372,10 @@ export default function DataTableDemo() {
       .post(`/api/jerseys`, requestBody)
       .then((res) => {
         fetchJerseys()
-        setSelectedTeam('')
-        setVariant('')
-        setCopyItem('')
-        setProdName("")
-        setProdCat("")
-        setSellingPrice("")
-        setCostPrice("")
-        setMRP("")
-        setFileList([])
         toast({
           title: `Jersey created successfully`,
         })
+        router.push('/inventory')
       })
       .catch((error) => {
         setFileList([])
