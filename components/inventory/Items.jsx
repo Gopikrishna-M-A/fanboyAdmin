@@ -114,9 +114,9 @@ export default function DataTableDemo() {
   const [sellingPrice, setSellingPrice] = useState("")
   const [costPrice, setCostPrice] = useState("")
   const [MRP, setMRP] = useState("")
-  const [description, setDescription] = useState("")
+  const [description, setDescription] = useState('')
 
-  const [reorderPoint, setReorderPoint] = useState("")
+  const [reorderPoint, setReorderPoint] = useState('')
 
   const [previewOpen, setPreviewOpen] = useState(false)
   const [previewImage, setPreviewImage] = useState("")
@@ -573,7 +573,7 @@ export default function DataTableDemo() {
                     <div className='flex w-full'>
                       <div className='text-muted-foreground w-40'>Stock</div>
                       <Input
-                        value={stock}
+                        value={stock || 20}
                         onChange={(e) => setStock(e.target.value)}
                         type='number'
                       />
@@ -586,7 +586,7 @@ export default function DataTableDemo() {
                         Reorder Point
                       </div>
                       <Input
-                        value={reorderPoint}
+                        value={reorderPoint || 5}
                         onChange={(e) => setReorderPoint(e.target.value)}
                         type='number'
                       />
@@ -599,7 +599,9 @@ export default function DataTableDemo() {
                         Description
                       </div>
                       <Textarea
-                        value={description}
+                        value={description || `Official Jersey of ${prodName} for 24/25 Season - ${variant} version
+For Name Print orders, contact directly on WhatsApp`}
+                       
                         onChange={(e) => setDescription(e.target.value)}
                       />
                     </div>
