@@ -83,7 +83,6 @@ import { Modal, Upload } from "antd"
 import { useToast } from "@/components/ui/use-toast"
 import { useRouter } from "next/navigation"
 
-
 const getBase64 = (file) =>
   new Promise((resolve, reject) => {
     const reader = new FileReader()
@@ -100,23 +99,22 @@ export default function DataTableDemo() {
   const [columnFilters, setColumnFilters] = useState([])
   const [columnVisibility, setColumnVisibility] = useState({})
   const [rowSelection, setRowSelection] = useState({})
-  const [stock,setStock] = useState()
+  const [stock, setStock] = useState(20)
   const [teams, setTeams] = useState([])
   const [selectedTeam, setSelectedTeam] = useState(null)
   const [copyItem, setCopyItem] = useState("")
-  const [variant,setVariant] = useState('')
+  const [variant, setVariant] = useState("")
   const [prodName, setProdName] = useState("")
   const [prodCat, setProdCat] = useState("")
   const [fileList, setFileList] = useState([])
   const [images, setImages] = useState([])
 
-
   const [sellingPrice, setSellingPrice] = useState("")
   const [costPrice, setCostPrice] = useState("")
   const [MRP, setMRP] = useState("")
-  const [description, setDescription] = useState('')
+  const [description, setDescription] = useState("")
 
-  const [reorderPoint, setReorderPoint] = useState('')
+  const [reorderPoint, setReorderPoint] = useState(5)
 
   const [previewOpen, setPreviewOpen] = useState(false)
   const [previewImage, setPreviewImage] = useState("")
@@ -141,31 +139,29 @@ export default function DataTableDemo() {
 
   const handleChange = ({ fileList: newFileList }) => setFileList(newFileList)
 
-
   const fetchJerseys = async () => {
     try {
-      const response = await axios.get('/api/jerseys');
-      setData(response.data);
+      const response = await axios.get("/api/jerseys")
+      setData(response.data)
     } catch (error) {
-      console.error('Error fetching jerseys:', error);
+      console.error("Error fetching jerseys:", error)
       // Handle the error appropriately (e.g., show an error message to the user)
     }
-  };
+  }
 
   const fetchTeams = async () => {
     try {
-      const response = await axios.get('/api/teams');
-      setTeams(response.data);
+      const response = await axios.get("/api/teams")
+      setTeams(response.data)
     } catch (error) {
-      console.error('Error fetching teams:', error);
+      console.error("Error fetching teams:", error)
       // Handle the error appropriately (e.g., show an error message to the user)
     }
-  };
-
+  }
 
   useEffect(() => {
-    fetchJerseys();
-    fetchTeams();
+    fetchJerseys()
+    fetchTeams()
   }, [])
 
   useEffect(() => {
@@ -328,12 +324,11 @@ export default function DataTableDemo() {
 
       await Promise.all(
         selectedIds.map(async (id) => {
-          await axios.delete(`/api/jerseys?id=${id}`).then((res)=>{
+          await axios.delete(`/api/jerseys?id=${id}`).then((res) => {
             toast({
               title: `${res.data.name} DELETED`,
             })
           })
-
         })
       )
 
@@ -368,6 +363,7 @@ export default function DataTableDemo() {
       description: description,
       reorderPoint: reorderPoint,
     }
+    console.log("requestBody", requestBody)
     axios
       .post(`/api/jerseys`, requestBody)
       .then((res) => {
@@ -375,7 +371,7 @@ export default function DataTableDemo() {
         toast({
           title: `Jersey created successfully`,
         })
-        router.push('/inventory')
+        router.push("/inventory")
       })
       .catch((error) => {
         setFileList([])
@@ -599,9 +595,7 @@ export default function DataTableDemo() {
                         Description
                       </div>
                       <Textarea
-                        value={description || `Official Jersey of ${prodName} for 24/25 Season - ${variant} version
-For Name Print orders, contact directly on WhatsApp`}
-                       
+                        value={description}
                         onChange={(e) => setDescription(e.target.value)}
                       />
                     </div>
@@ -640,28 +634,33 @@ For Name Print orders, contact directly on WhatsApp`}
             />
             <div className='flex gap-2'>
               <AlertDialog>
-      <AlertDialogTrigger asChild>
-        <Button variant="destructive" disabled={!Object.keys(rowSelection).length}>
-          Delete
-        </Button>
-      </AlertDialogTrigger>
-      <AlertDialogContent>
-        <AlertDialogHeader>
-          <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
-          <AlertDialogDescription>
-            This action cannot be undone. This will permanently delete the
-            selected jersey(s) from our servers.
-          </AlertDialogDescription>
-        </AlertDialogHeader>
-        <AlertDialogFooter>
-          <AlertDialogCancel onClick={()=>setRowSelection({})}>Cancel</AlertDialogCancel>
-          <AlertDialogAction  onClick={deleteProduct}>
-            Yes, delete jersey(s)
-          </AlertDialogAction>
-        </AlertDialogFooter>
-      </AlertDialogContent>
-    </AlertDialog>
-
+                <AlertDialogTrigger asChild>
+                  <Button
+                    variant='destructive'
+                    disabled={!Object.keys(rowSelection).length}>
+                    Delete
+                  </Button>
+                </AlertDialogTrigger>
+                <AlertDialogContent>
+                  <AlertDialogHeader>
+                    <AlertDialogTitle>
+                      Are you absolutely sure?
+                    </AlertDialogTitle>
+                    <AlertDialogDescription>
+                      This action cannot be undone. This will permanently delete
+                      the selected jersey(s) from our servers.
+                    </AlertDialogDescription>
+                  </AlertDialogHeader>
+                  <AlertDialogFooter>
+                    <AlertDialogCancel onClick={() => setRowSelection({})}>
+                      Cancel
+                    </AlertDialogCancel>
+                    <AlertDialogAction onClick={deleteProduct}>
+                      Yes, delete jersey(s)
+                    </AlertDialogAction>
+                  </AlertDialogFooter>
+                </AlertDialogContent>
+              </AlertDialog>
 
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
