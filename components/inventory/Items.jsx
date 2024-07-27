@@ -137,32 +137,36 @@ export default function DataTableDemo() {
     </button>
   )
 
-  const handleCancel = () => setPreviewOpen(false)
-  const handlePreview = async (file) => {
-    if (!file.url && !file.preview) {
-      file.preview = await getBase64(file.originFileObj)
-    }
-    setPreviewImage(file.url || file.preview)
-    setPreviewOpen(true)
-    setPreviewTitle(
-      file.name || file.url.substring(file.url.lastIndexOf("/") + 1)
-    )
-  }
   const handleChange = ({ fileList: newFileList }) => setFileList(newFileList)
 
 
-  useEffect(() => {
-    axios.get(`/api/jerseys`).then((res) => {
-      setData(res.data)
-    })
+  const fetchJerseys = async () => {
+    try {
+      const response = await axios.get('/api/jerseys');
+      setData(response.data);
+    } catch (error) {
+      console.error('Error fetching jerseys:', error);
+      // Handle the error appropriately (e.g., show an error message to the user)
+    }
+  };
 
-    axios.get(`/api/teams`).then((res) => {
-      setTeams(res.data)
-    })
+  const fetchTeams = async () => {
+    try {
+      const response = await axios.get('/api/teams');
+      setTeams(response.data);
+    } catch (error) {
+      console.error('Error fetching teams:', error);
+      // Handle the error appropriately (e.g., show an error message to the user)
+    }
+  };
+
+
+  useEffect(() => {
+    fetchJerseys();
+    fetchTeams();
   }, [])
 
   useEffect(() => {
-    console.log("copyyyy");
     const updateCopyItem = async () => {
       const res = await axios.get(`api/jerseys?id=${copyItem}`)
       const jersey = res.data.jersey
@@ -349,7 +353,6 @@ export default function DataTableDemo() {
         "Content-Type": "multipart/form-data",
       },
     })
-    console.log("image", res.data)
     const requestBody = {
       name: prodName,
       team: selectedTeam,
@@ -366,6 +369,10 @@ export default function DataTableDemo() {
     axios
       .post(`/api/jerseys`, requestBody)
       .then((res) => {
+        fetchJerseys()
+        setSelectedTeam('')
+        setVariant('')
+        setCopyItem('')
         setProdName("")
         setProdCat("")
         setSellingPrice("")
